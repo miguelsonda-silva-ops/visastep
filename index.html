@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisaStep | Painel de demonstração</title>
+  <style>
+    :root { --bg:#f3f6f8; --card:#fff; --text:#17212b; --muted:#647381; --line:#e1e8ed; --blue:#176b87; --green:#198754; --yellow:#c58a12; --red:#c74747; --shadow:0 10px 28px rgba(20,45,60,.07); }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:#123b4b; color:white; padding:22px max(20px,calc((100% - 1080px)/2)); }
+    .topline { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .logo { width:44px; height:44px; border-radius:13px; display:grid; place-items:center; background:#e4f3f6; color:#123b4b; font-size:22px; font-weight:800; }
+    h1 { margin:0; font-size:24px; letter-spacing:.2px; }
+    header p { margin:5px 0 0; color:#c8dce3; font-size:13px; }
+    .demo-tag { border:1px solid rgba(255,255,255,.35); border-radius:30px; padding:7px 11px; font-size:12px; white-space:nowrap; }
+    main { max-width:1080px; margin:28px auto; padding:0 20px 36px; }
+    .notice { background:#fff8e8; border:1px solid #f0dba8; color:#6f5316; border-radius:12px; padding:13px 16px; font-size:13px; line-height:1.5; margin-bottom:20px; }
+    .section-title { margin:24px 0 12px; font-size:17px; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow); }
+    .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.6px; }
+    .big { font-size:32px; font-weight:750; margin:9px 0 5px; }
+    .sub { color:var(--muted); font-size:12px; }
+    .status-line { display:flex; align-items:center; gap:9px; margin-top:12px; font-size:14px; font-weight:700; }
+    .dot { width:10px; height:10px; border-radius:50%; background:var(--green); }
+    .dot.warn { background:var(--yellow); } .dot.danger { background:var(--red); }
+    .panel-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:14px; }
+    .distance-display { margin:18px 0 14px; padding:18px; border-radius:13px; background:#f2f7f9; text-align:center; }
+    .distance-display strong { display:block; font-size:46px; letter-spacing:-1px; }
+    .distance-display span { color:var(--muted); font-size:13px; }
+    input[type=range] { width:100%; accent-color:var(--blue); margin:15px 0 8px; }
+    .range-labels { display:flex; justify-content:space-between; color:var(--muted); font-size:11px; }
+    .button-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:15px; }
+    button { border:0; border-radius:9px; padding:10px 13px; cursor:pointer; font-weight:700; font-size:12px; background:#e8f1f4; color:#17495b; }
+    button:hover { filter:brightness(.97); } button.primary { background:var(--blue); color:white; }
+    .device { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 0; border-bottom:1px solid var(--line); }
+    .device:last-child { border-bottom:0; }
+    .device strong { display:block; font-size:14px; } .device small { display:block; margin-top:4px; color:var(--muted); }
+    .pill { padding:6px 9px; border-radius:20px; background:#eaf5ef; color:#197447; font-size:11px; font-weight:700; }
+    .pill.off { background:#eef1f3; color:#687681; } .pill.warn { background:#fff4dc; color:#94640b; }
+    .bar { height:9px; background:#e7edf0; border-radius:20px; overflow:hidden; margin-top:12px; }
+    .bar > div { height:100%; width:0%; background:var(--blue); transition:width .2s; border-radius:20px; }
+    .footer { text-align:center; color:var(--muted); font-size:11px; margin-top:22px; line-height:1.5; }
+    @media (max-width:760px) { .grid,.panel-grid { grid-template-columns:1fr; } .demo-tag { display:none; } h1 { font-size:21px; } }
+  </style>
+</head>
+<body>
+  <header><div class="topline"><div class="brand"><div class="logo">V</div><div><h1>VisaStep</h1><p>Painel de acompanhamento do protótipo</p></div></div><div class="demo-tag">MODO DE DEMONSTRAÇÃO</div></div></header>
+  <main>
+    <div class="notice"><strong>Atenção:</strong> este painel funciona sem o ESP8266. As distâncias e os estados abaixo são simulados pelo navegador e não representam medições reais. Esta demonstração não deve ser usada para orientar deslocamentos.</div>
+    <h2 class="section-title">Visão geral</h2>
+    <section class="grid">
+      <article class="card"><div class="label">Distância simulada</div><div class="big" id="distanceCard">120 cm</div><div class="sub">Valor definido pelo controle de teste</div></article>
+      <article class="card"><div class="label">Situação do obstáculo</div><div class="status-line"><span class="dot" id="statusDot"></span><span id="statusText">Área livre</span></div><div class="sub" id="statusDescription" style="margin-top:9px">Nenhum alerta necessário na simulação.</div></article>
+      <article class="card"><div class="label">Conexão com a placa</div><div class="big" style="font-size:24px">Desconectada</div><div class="sub">ESP8266 ainda não integrado</div></article>
+    </section>
+    <h2 class="section-title">Simulador de obstáculos</h2>
+    <section class="panel-grid">
+      <article class="card"><div class="label">Ajustar distância do obstáculo</div><div class="distance-display"><strong id="distanceValue">120 cm</strong><span>Distância fictícia para demonstração</span></div><input id="distanceSlider" type="range" min="5" max="200" value="120" step="1" aria-label="Distância simulada em centímetros"><div class="range-labels"><span>5 cm · muito próximo</span><span>200 cm · distante</span></div><div class="bar"><div id="distanceBar"></div></div><div class="button-row"><button class="primary" data-distance="150">Sem obstáculo próximo</button><button data-distance="80">Obstáculo médio</button><button data-distance="25">Obstáculo próximo</button></div></article>
+      <article class="card"><div class="label">Alertas simulados</div><div class="device"><div><strong>Alerta sonoro</strong><small>Buzzer ativo</small></div><span class="pill off" id="soundState">Desligado</span></div><div class="device"><div><strong>Alerta vibratório</strong><small>Motor de vibração</small></div><span class="pill off" id="vibrationState">Desligado</span></div><p class="sub" id="alertExplanation" style="line-height:1.5;margin:15px 0 0">Os alertas mudarão conforme a distância selecionada.</p></article>
+    </section>
+    <h2 class="section-title">Como interpretar a simulação</h2>
+    <section class="grid">
+      <article class="card"><div class="label">Distância acima de 100 cm</div><div class="status-line"><span class="dot"></span>Área livre</div><div class="sub" style="margin-top:8px">Sem alerta na demonstração.</div></article>
+      <article class="card"><div class="label">Distância entre 41 e 100 cm</div><div class="status-line"><span class="dot warn"></span>Atenção</div><div class="sub" style="margin-top:8px">Alertas sonoro e vibratório simulados.</div></article>
+      <article class="card"><div class="label">Distância de até 40 cm</div><div class="status-line"><span class="dot danger"></span>Obstáculo próximo</div><div class="sub" style="margin-top:8px">Alerta de proximidade mais intenso na interface.</div></article>
+    </section>
+    <div class="footer">VisaStep — protótipo escolar de tecnologia assistiva.<br>Os limites apresentados são apenas parâmetros ilustrativos e deverão ser definidos e avaliados durante os testes reais.</div>
+  </main>
+  <script>
+    const slider=document.getElementById("distanceSlider"), distanceValue=document.getElementById("distanceValue"), distanceCard=document.getElementById("distanceCard"), distanceBar=document.getElementById("distanceBar"), statusText=document.getElementById("statusText"), statusDescription=document.getElementById("statusDescription"), statusDot=document.getElementById("statusDot"), soundState=document.getElementById("soundState"), vibrationState=document.getElementById("vibrationState"), alertExplanation=document.getElementById("alertExplanation");
+    function updateSimulation(distance) {
+      distance=Number(distance); distanceValue.textContent=distance+" cm"; distanceCard.textContent=distance+" cm"; distanceBar.style.width=((distance-5)/195*100)+"%";
+      let status,description,sound,vibration,explanation,level;
+      if(distance>100){status="Área livre";description="Nenhum alerta necessário nesta simulação.";sound=false;vibration=false;level="normal";explanation="A distância simulada está acima de 100 cm. Os alertas permanecem desligados.";}
+      else if(distance>40){status="Atenção";description="Obstáculo detectado na faixa intermediária.";sound=true;vibration=true;level="warn";explanation="A simulação indica um obstáculo intermediário. Os dois indicadores de alerta são ativados visualmente.";}
+      else{status="Obstáculo próximo";description="A distância simulada está na faixa de maior proximidade.";sound=true;vibration=true;level="danger";explanation="A simulação indica um obstáculo próximo. A interface destaca a condição para facilitar a demonstração.";}
+      statusText.textContent=status; statusDescription.textContent=description; statusDot.className="dot"+(level==="warn"?" warn":level==="danger"?" danger":""); setPill(soundState,sound); setPill(vibrationState,vibration); alertExplanation.textContent=explanation;
+    }
+    function setPill(element,active){element.textContent=active?"Ativado (simulado)":"Desligado";element.className="pill"+(active?" warn":" off");}
+    slider.addEventListener("input",()=>updateSimulation(slider.value));
+    document.querySelectorAll("[data-distance]").forEach(button=>button.addEventListener("click",()=>{slider.value=button.dataset.distance;updateSimulation(slider.value);}));
+    updateSimulation(slider.value);
+  </script>
+</body>
+</html>
